@@ -19,6 +19,8 @@ app.set('view engine', 'pug')
 app.use(express.urlencoded({ extended: false }))
 
 app.get('/', function (req, res) {
+  //get all the tasks from the database and add them to 
+  //an object which can then be passed to your template 
     const local = { tasks: [] }
   db.each('SELECT id, task FROM todo', function (err, row) {
     if (err) {
@@ -36,6 +38,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/', function (req, res) {
+  // creates general post where you will add a task
     const stmt = db.prepare('INSERT INTO todo (task) VALUES (?)');
     stmt.run(req.body.todo);
     stmt.finalize();
@@ -43,10 +46,12 @@ app.post('/', function (req, res) {
 });
 
 app.post('/delete', function (req, res) {
+  //deletes general post using button
     const stmt = db.prepare('DELETE FROM todo WHERE id = ?');
     stmt.run(req.body.id);
     stmt.finalize();
     res.redirect('/');
+    //Make sure the coutning goes back to zero so long as nothing is in list! :-p
     db.get('SELECT COUNT(*) as count FROM todo', function(err, row) {
         if (row.count === 0) {
             db.run('DELETE FROM sqlite_sequence WHERE name="todo"'); 

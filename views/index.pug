@@ -1,17 +1,18 @@
 doctype html
 link(rel='stylesheet' href='css/style.css')
 html
+    
     head
         title My First Full Stack
     body
         h1 Simple TODO APP
         p Add your TODO items here
-        
+        // form for input and button :-)
         form(action="/", method="post")
             | TODO: 
             input(type="text", name="todo", id="itemInput")
             button(type="submit") Add
-        
+        //creating delete section that also adds numbers for every task in order
         h2 My TODO List:
         ul
             - for (let i = 0; i < tasks.length; i++)
